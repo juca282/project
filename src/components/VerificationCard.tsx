@@ -165,10 +165,10 @@ const VerificationCard: React.FC = () => {
       <div 
         className="absolute inset-0 w-full h-full opacity-[0.04]"
         style={{
-          backgroundImage: `url("https://images2.imgbox.com/8b/95/1xUnQBWB_o.png")`,
-          backgroundSize: 'cover',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='spiral' patternUnits='userSpaceOnUse' width='100' height='100'%3E%3Cpath d='M50,50 C60,50 70,40 70,30 C70,20 60,10 50,10 C40,10 30,20 30,30 C30,40 40,50 50,50 Z' fill='%23000000'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23spiral)'/%3E%3C/svg%3E")`,
+          backgroundSize: '500px 500px',
           backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
+          backgroundRepeat: 'repeat',
           pointerEvents: 'none'
         }}
       />
