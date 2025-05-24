@@ -1,41 +1,19 @@
 import React, { useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import { motion } from 'framer-motion';
 import { Loader2, CheckCircle2, Search, AlertCircle } from 'lucide-react';
 
-// Simulação do Supabase para demonstração
-const mockSupabase = {
-  from: () => ({
-    select: () => ({
-      eq: (field: string, value: string) => ({
-        limit: () => ({
-          then: (callback: (result: any) => void) => {
-            // Simula uma consulta ao banco
-            setTimeout(() => {
-              if (value === '123456') {
-                callback({
-                  data: [{
-                    codigo_verificacao: '123456',
-                    nome: 'João Silva Santos',
-                    curso: 'Engenharia de Software',
-                    instituicao: 'Universidade Federal do Brasil',
-                    data_emissao: '2024-01-15',
-                    qr_code_url: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDEyOCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEyOCIgaGVpZ2h0PSIxMjgiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMTYiIHk9IjE2IiB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSJibGFjayIvPjxyZWN0IHg9IjMyIiB5PSIxNiIgd2lkdGg9IjgiIGhlaWdodD0iOCIgZmlsbD0iYmxhY2siLz48L3N2Zz4='
-                  }],
-                  error: null
-                });
-              } else {
-                callback({
-                  data: [],
-                  error: null
-                });
-              }
-            }, 2000);
-          }
-        })
-      })
-    })
-  })
-};
+// Validate environment variables
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error(
+    'Please connect to Supabase using the "Connect to Supabase" button in the top right corner.'
+  );
+}
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 interface DiplomaData {
   codigo_verificacao: string;
@@ -70,56 +48,6 @@ const DiplomaIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
   );
 };
 
-// Componente para a imagem de fundo comum
-const BackgroundImage: React.FC = () => (
-  <div 
-    className="absolute inset-0 w-full h-full opacity-[0.08] pointer-events-none"
-    style={{
-      backgroundImage: `url('data:image/svg+xml;base64,${btoa(`
-        <svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <g opacity="0.6">
-            <!-- Diploma principal -->
-            <rect x="50" y="50" width="300" height="200" rx="8" fill="none" stroke="#374151" stroke-width="3"/>
-            
-            <!-- Linha decorativa superior -->
-            <rect x="80" y="30" width="30" height="8" rx="4" fill="#374151"/>
-            <rect x="120" y="30" width="30" height="8" rx="4" fill="#374151"/>
-            <rect x="160" y="30" width="60" height="8" rx="4" fill="#6B7280"/>
-            <rect x="230" y="30" width="30" height="8" rx="4" fill="#374151"/>
-            <rect x="270" y="30" width="30" height="8" rx="4" fill="#374151"/>
-            
-            <!-- Conteúdo do diploma -->
-            <rect x="80" y="80" width="240" height="4" rx="2" fill="#9CA3AF"/>
-            <rect x="80" y="100" width="200" height="4" rx="2" fill="#9CA3AF"/>
-            <rect x="80" y="120" width="180" height="4" rx="2" fill="#9CA3AF"/>
-            <rect x="80" y="140" width="160" height="4" rx="2" fill="#9CA3AF"/>
-            
-            <!-- Assinatura -->
-            <rect x="80" y="180" width="80" height="4" rx="2" fill="#9CA3AF"/>
-            <rect x="240" y="180" width="80" height="4" rx="2" fill="#9CA3AF"/>
-            
-            <!-- Selo -->
-            <circle cx="320" cy="200" r="25" fill="none" stroke="#6B7280" stroke-width="2"/>
-            <circle cx="320" cy="200" r="15" fill="none" stroke="#6B7280" stroke-width="1"/>
-            
-            <!-- Elementos decorativos laterais -->
-            <rect x="20" y="80" width="15" height="4" rx="2" fill="#D1D5DB"/>
-            <rect x="20" y="100" width="15" height="4" rx="2" fill="#D1D5DB"/>
-            <rect x="20" y="120" width="15" height="4" rx="2" fill="#D1D5DB"/>
-            
-            <rect x="365" y="80" width="15" height="4" rx="2" fill="#D1D5DB"/>
-            <rect x="365" y="100" width="15" height="4" rx="2" fill="#D1D5DB"/>
-            <rect x="365" y="120" width="15" height="4" rx="2" fill="#D1D5DB"/>
-          </g>
-        </svg>
-      `)}`)}`,
-      backgroundSize: 'contain',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
-    }}
-  />
-);
-
 const VerificationCard: React.FC = () => {
   const [code, setCode] = useState('');
   const [isScanning, setIsScanning] = useState(false);
@@ -142,20 +70,19 @@ const VerificationCard: React.FC = () => {
     setVerificationStep('scanning');
 
     try {
-      const result = await new Promise<any>((resolve) => {
-        mockSupabase
-          .from('diplomas')
-          .select('*')
-          .eq('codigo_verificacao', code)
-          .limit(1)
-          .then(resolve);
-      });
+      const { data, error: supabaseError } = await supabase
+        .from('diplomas')
+        .select('*')
+        .eq('codigo_verificacao', code)
+        .limit(1);
 
-      if (!result.data || result.data.length === 0) {
-        throw new Error('Diploma não encontrado. Tente o código: 123456');
+      if (supabaseError) throw supabaseError;
+
+      if (!data || data.length === 0) {
+        throw new Error('Diploma não encontrado');
       }
 
-      const diploma = result.data[0];
+      const diploma = data[0];
       
       const requiredFields: (keyof DiplomaData)[] = ['codigo_verificacao', 'nome', 'curso', 'instituicao', 'data_emissao', 'qr_code_url'];
       const missingFields = requiredFields.filter(field => !diploma[field]);
@@ -164,7 +91,7 @@ const VerificationCard: React.FC = () => {
         throw new Error('Erro no sistema: Dados do diploma incompletos. Por favor, contate o suporte.');
       }
 
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
       setVerificationStep('success');
       await new Promise(resolve => setTimeout(resolve, 1000));
       setDiplomaData(diploma as DiplomaData);
@@ -178,71 +105,75 @@ const VerificationCard: React.FC = () => {
 
   if (diplomaData) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto relative overflow-hidden">
-        {/* Background Image - também na segunda parte */}
-        <BackgroundImage />
-        
-        <div className="relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex justify-center md:justify-start">
-              <img
-                src={diplomaData.qr_code_url}
-                alt={`QR Code do diploma de ${diplomaData.nome}`}
-                className="w-32 h-32 border border-gray-200 rounded-lg"
-              />
+      <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex justify-center md:justify-start">
+            <img
+              src={diplomaData.qr_code_url}
+              alt={`QR Code do diploma de ${diplomaData.nome}`}
+              className="w-32 h-32"
+            />
+          </div>
+          
+          <div className="md:col-span-2 space-y-4">
+            <div>
+              <h3 className="text-sm font-medium text-gray-500">Nome do Estudante</h3>
+              <p className="text-lg font-semibold text-gray-900">{diplomaData.nome}</p>
             </div>
             
-            <div className="md:col-span-2 space-y-4">
+            <div>
+              <h3 className="text-sm font-medium text-gray-500">Curso</h3>
+              <p className="text-lg text-gray-900">{diplomaData.curso}</p>
+            </div>
+            
+            <div>
+              <h3 className="text-sm font-medium text-gray-500">Instituição</h3>
+              <p className="text-lg text-gray-900">{diplomaData.instituicao}</p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <h3 className="text-sm font-medium text-gray-500">Nome do Estudante</h3>
-                <p className="text-lg font-semibold text-gray-900">{diplomaData.nome}</p>
+                <h3 className="text-sm font-medium text-gray-500">Data de Emissão</h3>
+                <p className="text-lg text-gray-900">{formatDate(diplomaData.data_emissao)}</p>
               </div>
               
               <div>
-                <h3 className="text-sm font-medium text-gray-500">Curso</h3>
-                <p className="text-lg text-gray-900">{diplomaData.curso}</p>
-              </div>
-              
-              <div>
-                <h3 className="text-sm font-medium text-gray-500">Instituição</h3>
-                <p className="text-lg text-gray-900">{diplomaData.instituicao}</p>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">Data de Emissão</h3>
-                  <p className="text-lg text-gray-900">{formatDate(diplomaData.data_emissao)}</p>
-                </div>
-                
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">Código de Verificação</h3>
-                  <p className="text-lg text-gray-900">{diplomaData.codigo_verificacao}</p>
-                </div>
+                <h3 className="text-sm font-medium text-gray-500">Código de Verificação</h3>
+                <p className="text-lg text-gray-900">{diplomaData.codigo_verificacao}</p>
               </div>
             </div>
           </div>
-          
-          <button
-            onClick={() => {
-              setDiplomaData(null);
-              setCode('');
-              setVerificationStep('idle');
-            }}
-            className="mt-6 w-full py-3 rounded-md text-white font-medium bg-[#0048A8] hover:bg-[#003366] transition"
-          >
-            Verificar outro diploma
-          </button>
         </div>
+        
+        <button
+          onClick={() => {
+            setDiplomaData(null);
+            setCode('');
+            setVerificationStep('idle');
+          }}
+          className="mt-6 w-full py-3 rounded-md text-white font-medium bg-[#0048A8] hover:bg-[#003366] transition"
+        >
+          Verificar outro diploma
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto relative overflow-hidden">
+    <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto relative">
       {/* Background Image */}
-      <BackgroundImage />
+      <div 
+        className="absolute inset-0 w-full h-full opacity-[0.04]"
+        style={{
+          backgroundImage: `url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQwIiBoZWlnaHQ9IjY0MCIgdmlld0JveD0iMCAwIDY0MCA2NDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0zMjAgNDBDMjEzLjU0MyA0MCA5OS4zMDc4IDc5LjQzMDMgMTkuMTA3NiAxNTkuNjMxQy02MS4wOTI1IDIzOS44MzEgLTEwMC41MjMgMzU0LjA2OCAtMTAwLjUyMyA0NjAuNTI1Qy0xMDAuNTIzIDU2Ni45ODEgLTYxLjA5MjUgNjgxLjIxOCAxOS4xMDc2IDc2MS40MThDOTkuMzA3OCA4NDEuNjE5IDIxMy41NDMgODgxLjA0OSAzMjAgODgxLjA0OUM0MjYuNDU3IDg4MS4wNDkgNTQwLjY5MyA4NDEuNjE5IDYyMC44OTMgNzYxLjQxOEM3MDEuMDk0IDY4MS4yMTggNzQwLjUyNCA1NjYuOTgxIDc0MC41MjQgNDYwLjUyNUM3NDAuNTI0IDM1NC4wNjggNzAxLjA5NCAyMzkuODMxIDYyMC44OTMgMTU5LjYzMUM1NDAuNjkzIDc5LjQzMDMgNDI2LjQ1NyA0MCAzMjAgNDBaTTMyMCAxMDBDNDAzLjQ3NCAxMDAgNDgzLjU3IDEzMi42MDkgNTQ0LjU1OCAxOTMuNTk4QzYwNS41NDcgMjU0LjU4NiA2MzguMTU2IDMzNC42ODMgNjM4LjE1NiA0MTguMTU2QzYzOC4xNTYgNTAxLjYzIDYwNS41NDcgNTgxLjcyNyA1NDQuNTU4IDY0Mi43MTVDNDQ3LjU3IDc0MC43MDMgMzEyLjE1NCA4MDEuNjkyIDIyMi4yODUgNzc2LjY5M0MxMzIuNDE3IDc1MS42OTMgNjQuODQzOCA2NjEuOTUzIDI3LjE5ODggNTcyLjMzMkMtMTAuNDQ2MiA0ODIuNzEyIC0xMS4wMTM4IDM4Mi42MDMgNS4yNTEyNSAyOTEuNTEyQzIxLjUxNjIgMjAwLjQyMSA2My45NjI1IDEyMy44OTggMTIzLjkwNiA2My45NTRDMTU2LjE5NSAzMS42NjU2IDIzMy45OTggMTAwIDMyMCAxMDBaTTMyMCAxNjBDMjU3LjkzNCAxNjAgMjAwLjA2MiAxODQuNzE5IDE1Ni4yNzMgMjI4LjUwOEMxMTIuNDg0IDI3Mi4yOTcgODcuNzY1NiAzMzAuMTY5IDg3Ljc2NTYgMzkyLjIzNUM4Ny43NjU2IDQ1NC4zMDEgMTEyLjQ4NCA1MTIuMTc0IDE1Ni4yNzMgNTU1Ljk2M0MyMDAuMDYyIDU5OS43NTIgMjU3LjkzNCA2MjQuNDcxIDMyMCA2MjQuNDcxQzM4Mi4wNjYgNjI0LjQ3MSA0MzkuOTM4IDU5OS43NTIgNDgzLjcyNyA1NTUuOTYzQzUyNy41MTYgNTEyLjE3NCA1NTIuMjM0IDQ1NC4zMDEgNTUyLjIzNCAzOTIuMjM1QzU1Mi4yMzQgMzMwLjE2OSA1MjcuNTE2IDI3Mi4yOTcgNDgzLjcyNyAyMjguNTA4QzQzOS45MzggMTg0LjcxOSAzODIuMDY2IDE2MCAzMjAgMTYwWk0zMjAgMjIwQzM2NS4wODggMjIwIDQwOC4zMjYgMjM3LjkyMSA0NDAuODgyIDI3MC40NzhDNDczLjQzOCAzMDMuMDM0IDQ5MS4zNTkgMzQ2LjI3MiA0OTEuMzU5IDM5MS4zNThDNDkxLjM1OSA0MzYuNDQ1IDQ3My40MzggNDc5LjY4MyA0NDAuODgyIDUxMi4yMzlDNDA4LjMyNiA1NDQuNzk1IDM2NS4wODggNTYyLjcxNiAzMjAgNTYyLjcxNkMyNzQuOTEzIDU2Mi43MTYgMjMxLjY3NCA1NDQuNzk1IDIwOS4xMTggNTEyLjIzOUMxODYuNTYzIDQ3OS42ODMgMTY4LjY0MiA0MzYuNDQ1IDE2OC42NDIgMzkxLjM1OEMxNjguNjQyIDM0Ni4yNzIgMTg2LjU2MyAzMDMuMDM0IDIwOS4xMTggMjcwLjQ3OEMyMzEuNjc0IDIzNy45MjEgMjc0LjkxMyAyMjAgMzIwIDIyMFpNMzIwIDI4MEMzMTMuNjM2IDI4MCAzMDcuMzYyIDI4MS4yNTggMzAxLjU1MiAyODMuNzA4Qzk0Ljc0NDIgMzI4LjEyNSAyNzEuMTc0IDMzNy43OTQgMjcxLjE3NCAzNDMuMTI1QzI3MS4xNzQgMzQ4LjQ1NiAyNzMuNzQyIDM1NC4xNTggMjc0LjE3NCAzNTkuNTlDMjc0LjYwNiAzNjQuOTQ0IDI3NC4xNzQgMzcwLjE0NSAyNzQuMTc0IDM3NC4yODFDMjc0LjE3NCAzNzkuNDY3IDI3NS4wMTQgMzg0LjQ2IDI3Ni42MTkgMzg5LjE2N0MyNzkuNTg0IDM5OC4wMzggMjgzLjc0MiA0MDYuMDc0IDI4OC44MTcgNDEzLjAzOUMyODkuNTcxIDQxMy4yNTMgMjkwLjMyNiA0MTMuNDY2IDI5MS4wNzggNDEzLjY3OEMyOTYuNzE0IDQxNS45NTQgMzAyLjY5IDQxOC4xOTggMzA4LjM5IDQyMC40NzRDMzE0LjQ5NCA0MTcuNDg4IDMyMC4yOCA0MTQuNTgzIDMyNiA0MDguOTE5QzMzNi4yNCAzOTcuNTk1IDM0Ni40OCAzODYuMjcxIDM1Ni43MiAzNzQuOTQ3QzM2NCAzNjcuNjgzIDM3MS4yIDM2MC4zNSAzNzggMzUyLjk5QzQzMC4zNTggMzUwLjU5NCA0ODIuNzE2IDM0OC4xOTggNTM1LjA3NCAzNDUuODAyQzQ2Ni4yMzUgMzQxLjA1NSAzOTcuMzk2IDMzNi4zMDggMzI4LjU1NyAzMzEuNTYxQzMzMS4zNTcgMzM0LjM2MSAzMzQuMTU3IDMzNy4xNjEgMzM2Ljk1NyAzMzkuOTYxWiIgZmlsbD0iIzBEOUVGRiIvPgo8L3N2Zz4=')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          pointerEvents: 'none'
+        }}
+      />
 
-      <div className="flex flex-col items-center text-center relative z-10">
+      <div className="flex flex-col items-center text-center relative">
         <div className="relative w-20 h-20 mb-4">
           {verificationStep === 'idle' && 
             <DiplomaIcon className="w-full h-full" />
@@ -252,7 +183,7 @@ const VerificationCard: React.FC = () => {
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="flex items-center justify-center w-full h-full"
+              className="flex items-center justify-center"
             >
               <Search className="w-12 h-12 text-[#0048A8]" />
             </motion.div>
@@ -262,7 +193,7 @@ const VerificationCard: React.FC = () => {
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="flex items-center justify-center w-full h-full"
+              className="flex items-center justify-center"
             >
               <CheckCircle2 className="w-12 h-12 text-green-500" />
             </motion.div>
@@ -272,7 +203,7 @@ const VerificationCard: React.FC = () => {
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="flex items-center justify-center w-full h-full"
+              className="flex items-center justify-center"
             >
               <AlertCircle className="w-12 h-12 text-red-500" />
             </motion.div>
@@ -292,7 +223,7 @@ const VerificationCard: React.FC = () => {
               type="text"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              placeholder="Digite o código aqui... (teste: 123456)"
+              placeholder="Digite o código aqui..."
               disabled={isScanning}
               className="w-full px-4 py-3 border border-[#0048A8] rounded-md focus:outline-none focus:ring-2 focus:ring-[#0048A8] focus:ring-opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
