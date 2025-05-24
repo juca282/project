@@ -161,14 +161,17 @@ const VerificationCard: React.FC = () => {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto relative">
-      {/* Background SVG */}
-      <div className="absolute inset-0 w-full h-full opacity-[0.04]" style={{ 
-        backgroundImage: `url("data:image/svg+xml,%3Csvg version='1.0' xmlns='http://www.w3.org/2000/svg' width='407pt' height='357pt' viewBox='0 0 407 357' preserveAspectRatio='xMidYMid meet'%3E%3Cg transform='translate(0,357) scale(0.1,-0.1)' fill='%23000000' stroke='none'%3E%3C/g%3E%3C/svg%3E")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        pointerEvents: 'none'
-      }} />
+      {/* Background Pattern */}
+      <div 
+        className="absolute inset-0 w-full h-full opacity-[0.04]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='spiral' patternUnits='userSpaceOnUse' width='100' height='100'%3E%3Cpath d='M50,50 C60,50 70,40 70,30 C70,20 60,10 50,10 C40,10 30,20 30,30 C30,40 40,50 50,50 Z' fill='%23000000'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23spiral)'/%3E%3C/svg%3E")`,
+          backgroundSize: '500px 500px',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'repeat',
+          pointerEvents: 'none'
+        }}
+      />
 
       <div className="flex flex-col items-center text-center relative">
         <div className="relative w-20 h-20 mb-4">
