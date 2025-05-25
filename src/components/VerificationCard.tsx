@@ -163,15 +163,13 @@ const VerificationCard: React.FC = () => {
     <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto relative">
    {/* Background Fingerprint */}
 <div
-  className="absolute inset-0 w-full h-full opacity-[0.20]"
+<div
+  className="absolute inset-0 w-full h-full opacity-[0.08] bg-no-repeat bg-center bg-contain"
   style={{
-    backgroundImage: `url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjQwNyIgaGVpZ2h0PSIzNTciPgo8cGF0aCBkPSJNMCAwIEMwLjY4NTU3OTgzIC0wLjAwMDY3NDc0IDEuMzcxMTU5NjcgLTAuMDAxMzQ5NDkgMi4wNzc1MTQ2NSAtMC4wMDIwNDQ2OCBDMTMuNjY3ODMzMjggMC4wMTYwMDA5IDI0Ljg0MTY5OTQ5IDAuNzc2MzIzMzIgMzYuMTg3NSAzLjI1IEMzNi45NjQxNjAxNiAzLjQxNjI4OTA2IDM3Ljc0MDgyMDMxIDMuNTgyNTc4MTMgMzguNTQxMDE1NjIgMy43NTM5MDYyNSBDNjMuMTkwMzg1OTYgOS4yMTM1Njk5IDg2LjE5OTk4NzE5IDE5Ljg2ODcxIDEwNi4xODc1IDM1LjI1IEMxMDcuMTA2NjAxNTYgMzUuOTQ0ODA0NjkgMTA4LjAyNTcwMzEyIDM2LjYzOTYwOTM3IDEwOC45NzI2NTYyIDM3LjM1NTQ2ODc1IEMxNDIuOTI5NjE4NDYgNjQuMDEwOTMzOTMgMTY0Ljc4NTQ0MDk0IDEwNS41NjkwNzkwMiAxNjQuNzUgMTUxLjUgQzE2NC43MjUzMTc3MSAxODMuNTQxMTUxNiAxNTcuMDczMTk3NzQgMjE3LjI4MjQ4ODc3IDEzNy4zMTI1IDI0My4yNSBDMTIzLjcwMTcwNDM2IDI2MS40NjA3MjA2NCAxMDUuNDczMDk3NDEgMjczLjYxNDMxNzE4IDg1LjYyNSAyODMuNSBDNjkuMzY2MjI2MjQgMjkxLjY1NzQxODQ2IDUxLjg1MDc0NjMyIDI5Ny4xNTgyOTAzOSAzNC4xODc1IDMwMC41IEMyNC42OTczNjE0NyAzMDIuMjU0NTY0MjggMTUuMTAyMDg2MSAzMDMuMTA1MDkwNDIgNS41IDMwMy4yNSBDNC4zMDg4MzE5IDMwMy4yNjcwNzM5MyAzLjEyMDcwNzk4IDMwMy4zMDgxMTc1MiAyIDMwMy41Ii8+Cjwvc3ZnPgoa=')`,
-    backgroundSize: 'contain',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    pointerEvents: 'none'
+    backgroundImage: `url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTA1IiBoZWlnaHQ9Ijc3IiB2aWV3Qm94PSIwIDAgMTA1IDc3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yNS45NzM1IDEuNjYxODdDMjUuOTczNSAwLjc0NDA0NSAyNi43MTc2IDAgMjcuNjM1NCAwSDMwLjM5MDZD31sIC4uLiIvPjwvc3ZnPg==")`,
   }}
 />
+
 
 
       <div className="flex flex-col items-center text-center relative">
