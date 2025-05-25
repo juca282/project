@@ -159,21 +159,17 @@ const VerificationCard: React.FC = () => {
     );
   }
 
-return (
+  return (
     <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto relative">
-        {/* Background Fingerprint */}
-        <div 
-            className="absolute inset-0 w-full h-full opacity-[0.20]"
-            style={{
-                backgroundImage: `url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDciIGhlaWdodD0iMzU3IiB2aWV3Qm94PSIwIDAgNDA3IDM1NyI+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDA5RUZGIiBzdHJva2Utd2lkdGg9IjQiPjxwYXRoIGQ9Ik0yMDMuNSw1MCBDMTIwLDUwLDgwLDEyMCw4MCwxODAgQzgwLDI0MCwxMDAsMjgwLDE0MCwzMTAiIC8+PHBhdGggZD0iTTIwMy41LDcwIEMxMzAsNzAsMTAwLDEzMCwxMDAsMTgwIEMxMDAsMjMwLDEyMCwyNzAsMTYwLDMwMCIgLz48cGF0aCBkPSJNMjAzLjUsOTAgQzE0MCw5MCwxMjAsMTQwLDEyMCwxODAgQzEyMCwyMjAsMTQwLDI2MCwxODAsMjkwIiAvPjxwYXRoIGQ9Ik0yMDMuNSwxMTAgQzE1MCwxMTAsMTQwLDE1MCwxNDAsMTgwIEMxNDAsMjEwLDE2MCwyNTAsMjAwLDI4MCIgLz48cGF0aCBkPSJNMjAzLjUsMTMwIEMxNjAsMTMwLDE2MCwxNjAsMTYwLDE4MCBDMTYwLDIwMCwxODAsMjQwLDIyMCwyNzAiIC8+PHBhdGggZD0iTTIwMy41LDE1MCBDMTcwLDE1MCwxODAsMTcwLDE4MCwxODAgQzE4MCwxOTAsMjAwLDIzMCwyNDAsMjYwIiAvPjxwYXRoIGQ9Ik0yMDMuNSwxNzAgQzE4MCwxNzAsMjAwLDE4MCwyMjAsMjUwIiAvPjwvZz48L3N2Zz4=')`,
-                backgroundSize: 'contain',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                pointerEvents: 'none',
-            }}
-        />
-        {/* Outros conteúdos aqui */}
-    </div>
+   {/* Background Fingerprint */}
+<div 
+  className="absolute inset-0 w-full h-full opacity-[0.20]"
+  style={{
+    backgroundImage: `url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDciIGhlaWdodD0iMzU3IiB2aWV3Qm94PSIwIDAgNDA3IDM1NyI+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDA5RUZGIiBzdHJva2Utd2lkdGg9IjQiPjxwYXRoIGQ9Ik0yMDMuNSw1MCBDMTIwLDUwLDgwLDEyMCw4MCwxODAgQzgwLDI0MCwxMDAsMjgwLDE0MCwzMTAiIC8+PHBhdGggZD0iTTIwMy41LDcwIEMxMzAsNzAsMTAwLDEzMCwxMDAsMTgwIEMxMDAsMjMwLDEyMCwyNzAsMTYwLDMwMCIgLz48cGF0aCBkPSJNMjAzLjUsOTAgQzE0MCw5MCwxMjAsMTQwLDEyMCwxODAgQzEyMCwyMjAsMTQwLDI2MCwxODAsMjkwIiAvPjxwYXRoIGQ9Ik0yMDMuNSwxMTAgQzE1MCwxMTAsMTQwLDE1MCwxNDAsMTgwIEMxNDAsMjEwLDE2MCwyNTAsMjAwLDI4MCIgLz48cGF0aCBkPSJNMjAzLjUsMTMwIEMxNjAsMTMwLDE2MCwxNjAsMTYwLDE4MCBDMTYwLDIwMCwxODAsMjQwLDIyMCwyNzAiIC8+PHBhdGggZD0iTTIwMy41LDE1MCBDMTcwLDE1MCwxODAsMTcwLDE4MCwxODAgQzE4MCwxOTAsMjAwLDIzMCwyNDAsMjYwIiAvPjxwYXRoIGQ9Ik0yMDMuNSwxNzAgQzE4MCwxNzAsMjAwLDE4MCwyMjAsMjUwIiAvPjwvZz48L3N2Zz4=')`,
+    backgroundSize: 'contain',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    pointerEvents: 'none'
   }}
 />
 
