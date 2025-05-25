@@ -253,7 +253,7 @@ const VerificationCard: React.FC = () => {
             >
               {isScanning ? (
                 <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  <Loader3 className="w-5 h-5 mr-2 animate-spin" />
                   Verificando...
                 </>
               ) : (
