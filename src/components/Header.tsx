@@ -30,22 +30,37 @@ const Header: React.FC = () => {
 <button 
   className="flex items-center gap-2 bg-[#f8f8f8] text-[#0048A8] px-5 py-2 rounded-full font-medium text-base hover:bg-[#f0f0f0] transition">
 <a 
-  href="https://sso.acesso.gov.br/login" 
-  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
->
-  {/* Ícone de usuário */}
-  <svg 
-    xmlns="http://www.w3.org/2000/svg"
-    fill="currentColor" 
-    viewBox="0 0 24 24" 
-    className="w-5 h-5"
-  >
-    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 
-             1.79-4 4 1.79 4 4 4zm0 2c-2.67 
-             0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-  </svg>
+ import React from 'react';
 
-  Entrar
-</a>
+const Header = () => {
+  return (
+    <header className="bg-white shadow">
+      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="text-xl font-bold">Minha Aplicação</div>
+        <div>
+          <a
+            href="https://sso.acesso.gov.br/login"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          >
+            {/* Ícone de usuário */}
+            <svg 
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor" 
+              viewBox="0 0 24 24" 
+              className="w-5 h-5"
+            >
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 
+                       1.79-4 4 1.79 4 4 4zm0 2c-2.67 
+                       0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            Entrar
+          </a>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
 
 export default Header;
