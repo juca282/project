@@ -162,14 +162,10 @@ const VerificationCard: React.FC = () => {
   return (
     <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto relative">
    {/* Background Fingerprint */}
-<div 
+<div
   className="absolute inset-0 w-full h-full opacity-[0.20]"
   style={{
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2">
-    <path d="M12 2C12 2 7 4 7 9c0 5 5 8 5 8s5-3 5-8c0-5-5-7-5-7z" />
-    <path d="M7 9c-1.5 1-2.5 3-2.5 5 0 3.5 4 6 4 6s4-2.5 4-6c0-2-1-4-2.5-5" />
-    <path d="M2 12c0 3.5 3 6 3 6s3-2 3-6c0-2-1-4-2.5-5M12 22c0-3-3-6-3-6s3-2.5 3-6" />
-</svg>
+    backgroundImage: `url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjQwNyIgaGVpZ2h0PSIzNTciPgo8cGF0aCBkPSJNMCAwIEMwLjY4NTU3OTgzIC0wLjAwMDY3NDc0IDEuMzcxMTU5NjcgLTAuMDAxMzQ5NDkgMi4wNzc1MTQ2NSAtMC4wMDIwNDQ2OCBDMTMuNjY3ODMzMjggMC4wMTYwMDA5IDI0Ljg0MTY5OTQ5IDAuNzc2MzIzMzIgMzYuMTg3NSAzLjI1IEMzNi45NjQxNjAxNiAzLjQxNjI4OTA2IDM3Ljc0MDgyMDMxIDMuNTgyNTc4MTMgMzguNTQxMDE1NjIgMy43NTM5MDYyNSBDNjMuMTkwMzg1OTYgOS4yMTM1Njk5IDg2LjE5OTk4NzE5IDE5Ljg2ODcxIDEwNi4xODc1IDM1LjI1IEMxMDcuMTA2NjAxNTYgMzUuOTQ0ODA0NjkgMTA4LjAyNTcwMzEyIDM2LjYzOTYwOTM3IDEwOC45NzI2NTYyIDM3LjM1NTQ2ODc1IEMxNDIuOTI5NjE4NDYgNjQuMDEwOTMzOTMgMTY0Ljc4NTQ0MDk0IDEwNS41NjkwNzkwMiAxNjQuNzUgMTUxLjUgQzE2NC43MjUzMTc3MSAxODMuNTQxMTUxNiAxNTcuMDczMTk3NzQgMjE3LjI4MjQ4ODc3IDEzNy4zMTI1IDI0My4yNSBDMTIzLjcwMTcwNDM2IDI2MS40NjA3MjA2NCAxMDUuNDczMDk3NDEgMjczLjYxNDMxNzE4IDg1LjYyNSAyODMuNSBDNjkuMzY2MjI2MjQgMjkxLjY1NzQxODQ2IDUxLjg1MDc0NjMyIDI5Ny4xNTgyOTAzOSAzNC4xODc1IDMwMC41IEMyNC42OTczNjE0NyAzMDIuMjU0NTY0MjggMTUuMTAyMDg2MSAzMDMuMTA1MDkwNDIgNS41IDMwMy4yNSBDNC4zMDg4MzE5IDMwMy4yNjcwNzM5MyAzLjEyMDcwNzk4IDMwMy4zMDgxMTc1MiAyIDMwMy41Ii8+Cjwvc3ZnPgo=')`,
     backgroundSize: 'contain',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
