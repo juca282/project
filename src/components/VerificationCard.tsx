@@ -127,31 +127,42 @@ const VerificationCard: React.FC = () => {
             />
           </div>
           
-          <div className="md:col-span-2 space-y-4">
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Nome do Estudante</h3>
-              <p className="text-lg font-semibold text-gray-900">{diplomaData.nome}</p>
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Curso</h3>
-              <p className="text-lg text-gray-900">{diplomaData.curso}</p>
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Instituição</h3>
-              <p className="text-lg text-gray-900">{diplomaData.instituicao}</p>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
+          <div className="md:col-span-2">
+            <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
-                <h3 className="text-sm font-medium text-gray-500">Data de Emissão</h3>
-                <p className="text-lg text-gray-900">{formatDate(diplomaData.data_emissao)}</p>
+                <h3 className="text-sm font-medium text-gray-500">Nome do Estudante</h3>
+                <p className="text-lg font-semibold text-gray-900">{diplomaData.nome}</p>
               </div>
               
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Código de Verificação</h3>
                 <p className="text-lg text-gray-900">{diplomaData.codigo_verificacao}</p>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">Curso</h3>
+                <p className="text-lg text-gray-900">{diplomaData.curso}</p>
+              </div>
+              
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">Instituição</h3>
+                <p className="text-lg text-gray-900">{diplomaData.instituicao}</p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h3 className="text-sm font-medium text-gray-500">Data de Emissão</h3>
+                  <p className="text-lg text-gray-900">{formatDate(diplomaData.data_emissao)}</p>
+                </div>
+                
+                <div>
+                  <h3 className="text-sm font-medium text-gray-500">Status</h3>
+                  <p className="text-lg">
+                    <span className="text-green-600 font-medium">Ativo</span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
