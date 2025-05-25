@@ -165,13 +165,14 @@ const VerificationCard: React.FC = () => {
       <div 
         className="absolute inset-0 w-full h-full opacity-[0.20]"
         style={{
-          backgroundImage: `url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjQwNyIgaGVpZ2h0PSIzNTciPgo8cGF0aCBkPSJNMCAwIEMwLjY4NTU3OTgzIC0wLjAwMDY3NDc0IDEuMzcxMTU5NjcgLTAuMDAxMzQ5NDkgMi4wNzc1MTQ2NSAtMC4wMDIwNDQ2OCBDMT...')`,
-          backgroundSize: 'contain',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          pointerEvents: 'none'
-        }}
-      />
+    width: '400px',
+    height: '300px',
+    backgroundImage: `url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0xMDAgMTUwIGMgMCAyMCAyMCAzMCAzMCAzMCAyMCAwIDMwLTIwIDMwLTMwIiBzdHJva2U9IiNkZGQiIHN0cm9rZS13aWR0aD0iNSIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjIwMCIgeT0iMTgwIiBmb250LXNpemU9IjI0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjY2NjIj5FcnJvPC90ZXh0Pjwvc3ZnPg==')`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+  }}
+/>
 
       <div className="flex flex-col items-center text-center relative">
         <div className="relative w-20 h-20 mb-4">
