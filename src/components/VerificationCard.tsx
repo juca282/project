@@ -161,15 +161,6 @@ const VerificationCard: React.FC = () => {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto relative">
-{/* Background Fingerprint */}
-<div
-  className="absolute inset-0 w-full h-full opacity-[0.08] bg-no-repeat bg-center bg-contain"
-  style={{
-    backgroundImage: `url("data:image/svg+xml;base64,...")`,
-  }}
-/>
-
-
 
       <div className="flex flex-col items-center text-center relative">
         <div className="relative w-20 h-20 mb-4">
