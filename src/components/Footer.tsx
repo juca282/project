@@ -11,44 +11,44 @@ const Footer: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-8 mb-10">
           <FooterColumn title="Composição">
-            <FooterLink href="#">Competências</FooterLink>
-            <FooterLink href="#">Gabinete do Ministro</FooterLink>
-            <FooterLink href="#">Secretarias</FooterLink>
-            <FooterLink href="#">Estrutura Organizacional</FooterLink>
+            <FooterLink href="https://www.gov.br/">Competências</FooterLink>
+            <FooterLink href="https://www.gov.br/">Gabinete do Ministro</FooterLink>
+            <FooterLink href="https://www.gov.br/">Secretarias</FooterLink>
+            <FooterLink href="https://www.gov.br/">Estrutura Organizacional</FooterLink>
           </FooterColumn>
 
           <FooterColumn title="Canais de Atendimento">
-            <FooterLink href="#">Ouvidoria</FooterLink>
-            <FooterLink href="#">Área de imprensa</FooterLink>
-            <FooterLink href="#">Fale Conosco</FooterLink>
+            <FooterLink href="https://www.gov.br/">Ouvidoria</FooterLink>
+            <FooterLink href="https://www.gov.br/">Área de imprensa</FooterLink>
+            <FooterLink href="https://www.gov.br/">Fale Conosco</FooterLink>
           </FooterColumn>
 
           <FooterColumn title="Acesso à Informação">
-            <FooterLink href="#">Institucional</FooterLink>
-            <FooterLink href="#">Ações e Programas</FooterLink>
-            <FooterLink href="#">Instância Permanente de Negociação</FooterLink>
-            <FooterLink href="#">Participação Social</FooterLink>
+            <FooterLink href="https://www.gov.br/">Institucional</FooterLink>
+            <FooterLink href="https://www.gov.br/">Ações e Programas</FooterLink>
+            <FooterLink href="https://www.gov.br/">Instância Permanente de Negociação</FooterLink>
+            <FooterLink href="https://www.gov.br/">Participação Social</FooterLink>
           </FooterColumn>
 
           <FooterColumn title="Centrais de Conteúdo">
-            <FooterLink href="#">Vídeos</FooterLink>
-            <FooterLink href="#">Áudios</FooterLink>
-            <FooterLink href="#">Fotos</FooterLink>
-            <FooterLink href="#">Aplicativos</FooterLink>
-            <FooterLink href="#">Campanhas</FooterLink>
+            <FooterLink href="https://www.gov.br/">Vídeos</FooterLink>
+            <FooterLink href="https://www.gov.br/">Áudios</FooterLink>
+            <FooterLink href="https://www.gov.br/">Fotos</FooterLink>
+            <FooterLink href="https://www.gov.br/">Aplicativos</FooterLink>
+            <FooterLink href="https://www.gov.br/">Campanhas</FooterLink>
           </FooterColumn>
 
           <FooterColumn title="Sistemas">
-            <FooterLink href="#">Sisu</FooterLink>
-            <FooterLink href="#">Prouni</FooterLink>
-            <FooterLink href="#">Fies</FooterLink>
-            <FooterLink href="#">E-mec</FooterLink>
+            <FooterLink href="https://www.gov.br/">Sisu</FooterLink>
+            <FooterLink href="https://www.gov.br/">Prouni</FooterLink>
+            <FooterLink href="https://www.gov.br/">Fies</FooterLink>
+            <FooterLink href="https://www.gov.br/">E-mec</FooterLink>
           </FooterColumn>
 
           <FooterColumn title="Portal de Conformidade do Diploma">
-            <FooterLink href="#">Instituições</FooterLink>
-            <FooterLink href="#">Legislação</FooterLink>
-            <FooterLink href="#">Perguntas Frequentes</FooterLink>
+            <FooterLink href="https://www.gov.br/">Instituições</FooterLink>
+            <FooterLink href="https://www.gov.br/">Legislação</FooterLink>
+            <FooterLink href="https://www.gov.br/">Perguntas Frequentes</FooterLink>
           </FooterColumn>
         </div>
 

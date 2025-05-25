@@ -11,38 +11,37 @@ const Header: React.FC = () => {
             <GovBrLogo className="h-8 w-auto" />
           </div>
           
-<nav className="hidden md:flex space-x-6 text-xs ml-auto pr-4">
-  <a href="#" className="hover:text-[#1354c0] transition" style={{ color: '#1354c0' }}>
-    Órgãos do Governo
-  </a>
-  <a href="#" className="hover:text-[#1354c0] transition" style={{ color: '#1354c0' }}>
-    Acesso à Informação
-  </a>
-  <a href="#" className="hover:text-[#1354c0] transition" style={{ color: '#1354c0' }}>
-    Legislação
-  </a>
-  <a href="#" className="hover:text-[#1354c0] transition" style={{ color: '#1354c0' }}>
-    Acessibilidade
-  </a>
-</nav>
+          <nav className="hidden md:flex space-x-6 text-xs ml-auto pr-4">
+            <a href="https://www.gov.br/" className="hover:text-[#1354c0] transition" style={{ color: '#1354c0' }}>
+              Órgãos do Governo
+            </a>
+            <a href="https://www.gov.br/" className="hover:text-[#1354c0] transition" style={{ color: '#1354c0' }}>
+              Acesso à Informação
+            </a>
+            <a href="https://www.gov.br/" className="hover:text-[#1354c0] transition" style={{ color: '#1354c0' }}>
+              Legislação
+            </a>
+            <a href="https://www.gov.br/" className="hover:text-[#1354c0] transition" style={{ color: '#1354c0' }}>
+              Acessibilidade
+            </a>
+          </nav>
 
-          
-<button 
-  className="flex items-center gap-2 bg-[#f8f8f8] text-[#0048A8] px-5 py-2 rounded-full font-medium text-base hover:bg-[#f0f0f0] transition">
-  
-  {/* Ícone de usuário */}
-  <svg 
-    xmlns="http://www.w3.org/2000/svg"
-    fill="currentColor" 
-    viewBox="0 0 24 24" 
-    className="w-5 h-5">
-    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 
-             1.79-4 4 1.79 4 4 4zm0 2c-2.67 
-             0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-  </svg>
-
-  Entrar
-</button>
+          <a 
+            href="https://sso.acesso.gov.br/login"
+            className="flex items-center gap-2 bg-[#f8f8f8] text-[#0048A8] px-5 py-2 rounded-full font-medium text-base hover:bg-[#f0f0f0] transition"
+          >
+            {/* Ícone de usuário */}
+            <svg 
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor" 
+              viewBox="0 0 24 24" 
+              className="w-5 h-5">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 
+                       1.79-4 4 1.79 4 4 4zm0 2c-2.67 
+                       0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            Entrar
+          </a>
         </div>
       </div>
     </header>
