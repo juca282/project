@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { motion } from 'framer-motion';
 import { Loader2, CheckCircle2, Search, AlertCircle } from 'lucide-react';
+import { rateLimit, sanitizeInput, VERIFICATION_CODE_REGEX, ERROR_MESSAGES } from '../utils/security';
 
 // Validate environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -13,7 +14,14 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: false // Disable session persistence for security
+  },
+  db: {
+    schema: 'public'
+  }
+});
 
 interface DiplomaData {
   codigo_verificacao: string;
@@ -55,13 +63,30 @@ const VerificationCard: React.FC = () => {
   const [error, setError] = useState('');
   const [verificationStep, setVerificationStep] = useState<'idle' | 'scanning' | 'success' | 'error'>('idle');
 
-  const formatDate = (dateString: string) => {
+  const formatDate = useCallback((dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR');
-  };
+  }, []);
+
+  const validateVerificationCode = useCallback((code: string): boolean => {
+    return VERIFICATION_CODE_REGEX.test(code);
+  }, []);
 
   const handleVerify = async () => {
-    if (!code.trim()) {
+    const sanitizedCode = sanitizeInput(code);
+    
+    if (!sanitizedCode) {
       setError('Por favor, digite um código válido.');
+      return;
+    }
+
+    if (!validateVerificationCode(sanitizedCode)) {
+      setError(ERROR_MESSAGES.INVALID_CODE);
+      return;
+    }
+
+    // Apply rate limiting
+    if (!rateLimit(sanitizedCode, 5)) {
+      setError(ERROR_MESSAGES.RATE_LIMIT);
       return;
     }
 
@@ -72,32 +97,32 @@ const VerificationCard: React.FC = () => {
     try {
       const { data, error: supabaseError } = await supabase
         .from('diplomas')
-        .select('*')
-        .eq('codigo_verificacao', code)
-        .limit(1);
+        .select('codigo_verificacao, nome, curso, instituicao, data_emissao, qr_code_url')
+        .eq('codigo_verificacao', sanitizedCode)
+        .limit(1)
+        .single();
 
-      if (supabaseError) throw supabaseError;
+      if (supabaseError) throw new Error(ERROR_MESSAGES.NOT_FOUND);
 
-      if (!data || data.length === 0) {
-        throw new Error('Diploma não encontrado');
+      if (!data) {
+        throw new Error(ERROR_MESSAGES.NOT_FOUND);
       }
 
-      const diploma = data[0];
-      
       const requiredFields: (keyof DiplomaData)[] = ['codigo_verificacao', 'nome', 'curso', 'instituicao', 'data_emissao', 'qr_code_url'];
-      const missingFields = requiredFields.filter(field => !diploma[field]);
-      
+      const missingFields = requiredFields.filter(field => !data[field]);
+
       if (missingFields.length > 0) {
-        throw new Error('Erro no sistema: Dados do diploma incompletos. Por favor, contate o suporte.');
+        throw new Error(ERROR_MESSAGES.SYSTEM_ERROR);
       }
 
+      // Add artificial delay for security (prevent timing attacks)
       await new Promise(resolve => setTimeout(resolve, 2000));
       setVerificationStep('success');
       await new Promise(resolve => setTimeout(resolve, 1000));
-      setDiplomaData(diploma as DiplomaData);
+      setDiplomaData(data as DiplomaData);
     } catch (err) {
       setVerificationStep('error');
-      setError(err instanceof Error ? err.message : 'Erro ao verificar o diploma');
+      setError(err instanceof Error ? err.message : ERROR_MESSAGES.SYSTEM_ERROR);
     } finally {
       setIsScanning(false);
     }
@@ -249,10 +274,12 @@ const VerificationCard: React.FC = () => {
               placeholder="Digite o código aqui..."
               disabled={isScanning}
               className="w-full px-4 py-3 border border-[#0048A8] rounded-md focus:outline-none focus:ring-2 focus:ring-[#0048A8] focus:ring-opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              maxLength={50}
+              aria-label="Código de verificação do diploma"
             />
 
             {error && (
-              <p className="text-red-600 text-sm">{error}</p>
+              <p className="text-red-600 text-sm" role="alert">{error}</p>
             )}
 
             <button 
@@ -261,6 +288,7 @@ const VerificationCard: React.FC = () => {
               className={`w-full py-3 rounded-md text-white font-medium transition flex items-center justify-center ${
                 code.trim() && !isScanning ? 'bg-[#0048A8] hover:bg-[#003366]' : 'bg-gray-400 cursor-not-allowed'
               }`}
+              aria-label="Verificar diploma"
             >
               {isScanning ? (
                 <>
