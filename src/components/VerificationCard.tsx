@@ -176,7 +176,7 @@ const VerificationCard: React.FC = () => {
           }}
           className="mt-6 w-full py-3 rounded-md text-white font-medium bg-[#0048A8] hover:bg-[#003366] transition"
         >
-          Verificar outro diploma
+          Voltar
         </button>
       </div>
     );
