@@ -264,7 +264,7 @@ const VerificationCard: React.FC = () => {
             >
               {isScanning ? (
                 <>
-                  Verificando....
+                  Verificando...
                 </>
               ) : (
                 'Verificar'
