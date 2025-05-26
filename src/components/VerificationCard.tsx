@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { motion } from 'framer-motion';
 import { Loader2, CheckCircle2, Search, AlertCircle } from 'lucide-react';
@@ -59,8 +59,8 @@ const VerificationCard: React.FC = () => {
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
-  const handleVerify = async (verificationCode: string) => {
-    if (!verificationCode.trim()) {
+  const handleVerify = async () => {
+    if (!code.trim()) {
       setError('Por favor, digite um código válido.');
       return;
     }
@@ -73,7 +73,7 @@ const VerificationCard: React.FC = () => {
       const { data, error: supabaseError } = await supabase
         .from('diplomas')
         .select('*')
-        .eq('codigo_verificacao', verificationCode)
+        .eq('codigo_verificacao', code)
         .limit(1);
 
       if (supabaseError) throw supabaseError;
@@ -103,16 +103,6 @@ const VerificationCard: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const protocolo = params.get('protocolo');
-    
-    if (protocolo) {
-      setCode(protocolo);
-      handleVerify(protocolo);
-    }
-  }, []);
-
   if (diplomaData) {
     return (
       <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto relative">
@@ -137,42 +127,31 @@ const VerificationCard: React.FC = () => {
             />
           </div>
           
-          <div className="md:col-span-2">
-            <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="md:col-span-2 space-y-4">
+            <div>
+              <h3 className="text-sm font-medium text-gray-500">Nome do Estudante</h3>
+              <p className="text-lg font-semibold text-gray-900">{diplomaData.nome}</p>
+            </div>
+            
+            <div>
+              <h3 className="text-sm font-medium text-gray-500">Curso</h3>
+              <p className="text-lg text-gray-900">{diplomaData.curso}</p>
+            </div>
+            
+            <div>
+              <h3 className="text-sm font-medium text-gray-500">Instituição</h3>
+              <p className="text-lg text-gray-900">{diplomaData.instituicao}</p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <h3 className="text-sm font-medium text-gray-500">Nome do Estudante</h3>
-                <p className="text-lg font-semibold text-gray-900">{diplomaData.nome}</p>
+                <h3 className="text-sm font-medium text-gray-500">Data de Emissão</h3>
+                <p className="text-lg text-gray-900">{formatDate(diplomaData.data_emissao)}</p>
               </div>
               
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Código de Verificação</h3>
                 <p className="text-lg text-gray-900">{diplomaData.codigo_verificacao}</p>
-              </div>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <h3 className="text-sm font-medium text-gray-500">Curso</h3>
-                <p className="text-lg text-gray-900">{diplomaData.curso}</p>
-              </div>
-              
-              <div>
-                <h3 className="text-sm font-medium text-gray-500">Instituição</h3>
-                <p className="text-lg text-gray-900">{diplomaData.instituicao}</p>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">Data de Emissão</h3>
-                  <p className="text-lg text-gray-900">{formatDate(diplomaData.data_emissao)}</p>
-                </div>
-                
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">Status</h3>
-                  <p className="text-lg">
-                    <span className="text-green-600 font-medium">Ativo</span>
-                  </p>
-                </div>
               </div>
             </div>
           </div>
@@ -183,14 +162,10 @@ const VerificationCard: React.FC = () => {
             setDiplomaData(null);
             setCode('');
             setVerificationStep('idle');
-            // Remove the protocolo parameter from the URL
-            const url = new URL(window.location.href);
-            url.searchParams.delete('protocolo');
-            window.history.replaceState({}, '', url);
           }}
           className="mt-6 w-full py-3 rounded-md text-white font-medium bg-[#0048A8] hover:bg-[#003366] transition"
         >
-          Voltar
+          Verificar outro diploma
         </button>
       </div>
     );
@@ -270,7 +245,7 @@ const VerificationCard: React.FC = () => {
             )}
 
             <button 
-              onClick={() => handleVerify(code)}
+              onClick={handleVerify}
               disabled={!code.trim() || isScanning}
               className={`w-full py-3 rounded-md text-white font-medium transition flex items-center justify-center ${
                 code.trim() && !isScanning ? 'bg-[#0048A8] hover:bg-[#003366]' : 'bg-gray-400 cursor-not-allowed'
