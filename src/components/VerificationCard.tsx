@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 import { motion } from 'framer-motion';
 import { Loader2, CheckCircle2, Search, AlertCircle } from 'lucide-react';
-import { sanitizeInput, validateVerificationCode, sanitizeUrlParams } from '../utils/security';
 
 // Validate environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const baseUrl = window.location.origin;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error(
@@ -52,8 +49,6 @@ const DiplomaIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
 };
 
 const VerificationCard: React.FC = () => {
-  const { protocolo } = useParams();
-  const navigate = useNavigate();
   const [code, setCode] = useState('');
   const [isScanning, setIsScanning] = useState(false);
   const [diplomaData, setDiplomaData] = useState<DiplomaData | null>(null);
@@ -64,20 +59,9 @@ const VerificationCard: React.FC = () => {
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
-  const generateVerificationUrl = (code: string) => {
-    return `${baseUrl}/verificar/${code}`;
-  };
-
   const handleVerify = async (verificationCode: string) => {
     if (!verificationCode.trim()) {
       setError('Por favor, digite um código válido.');
-      return;
-    }
-
-    // Sanitize and validate the verification code
-    const sanitizedCode = sanitizeInput(verificationCode);
-    if (!validateVerificationCode(sanitizedCode)) {
-      setError('Código de verificação inválido.');
       return;
     }
 
@@ -89,7 +73,7 @@ const VerificationCard: React.FC = () => {
       const { data, error: supabaseError } = await supabase
         .from('diplomas')
         .select('*')
-        .eq('codigo_verificacao', sanitizedCode)
+        .eq('codigo_verificacao', verificationCode)
         .limit(1);
 
       if (supabaseError) throw supabaseError;
@@ -107,11 +91,6 @@ const VerificationCard: React.FC = () => {
         throw new Error('Erro no sistema: Dados do diploma incompletos. Por favor, contate o suporte.');
       }
 
-      // Update URL with the verification code if not already there
-      if (!protocolo) {
-        navigate(`/verificar/${sanitizedCode}`);
-      }
-
       await new Promise(resolve => setTimeout(resolve, 2000));
       setVerificationStep('success');
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -125,20 +104,16 @@ const VerificationCard: React.FC = () => {
   };
 
   useEffect(() => {
-    // Check for protocol in URL params or route params
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlProtocolo = urlParams.get('protocolo');
-    const verificationCode = protocolo || urlProtocolo;
+    const params = new URLSearchParams(window.location.search);
+    const protocolo = params.get('protocolo');
     
-    if (verificationCode) {
-      setCode(verificationCode);
-      handleVerify(verificationCode);
+    if (protocolo) {
+      setCode(protocolo);
+      handleVerify(protocolo);
     }
-  }, [protocolo]);
+  }, []);
 
   if (diplomaData) {
-    const verificationUrl = generateVerificationUrl(diplomaData.codigo_verificacao);
-
     return (
       <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto relative">
         {/* Background SVG */}
@@ -199,11 +174,6 @@ const VerificationCard: React.FC = () => {
                   </p>
                 </div>
               </div>
-
-              <div>
-                <h3 className="text-sm font-medium text-gray-500">Link de Verificação</h3>
-                <p className="text-sm text-gray-600 break-all">{verificationUrl}</p>
-              </div>
             </div>
           </div>
         </div>
@@ -213,7 +183,10 @@ const VerificationCard: React.FC = () => {
             setDiplomaData(null);
             setCode('');
             setVerificationStep('idle');
-            navigate('/');
+            // Remove the protocolo parameter from the URL
+            const url = new URL(window.location.href);
+            url.searchParams.delete('protocolo');
+            window.history.replaceState({}, '', url);
           }}
           className="mt-6 w-full py-3 rounded-md text-white font-medium bg-[#0048A8] hover:bg-[#003366] transition"
         >
