@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { motion } from 'framer-motion';
 import { Loader2, CheckCircle2, Search, AlertCircle } from 'lucide-react';
@@ -59,8 +59,8 @@ const VerificationCard: React.FC = () => {
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
-  const handleVerify = async () => {
-    if (!code.trim()) {
+  const handleVerify = async (verificationCode: string) => {
+    if (!verificationCode.trim()) {
       setError('Por favor, digite um código válido.');
       return;
     }
@@ -73,7 +73,7 @@ const VerificationCard: React.FC = () => {
       const { data, error: supabaseError } = await supabase
         .from('diplomas')
         .select('*')
-        .eq('codigo_verificacao', code)
+        .eq('codigo_verificacao', verificationCode)
         .limit(1);
 
       if (supabaseError) throw supabaseError;
@@ -102,6 +102,16 @@ const VerificationCard: React.FC = () => {
       setIsScanning(false);
     }
   };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const protocolo = params.get('protocolo');
+    
+    if (protocolo) {
+      setCode(protocolo);
+      handleVerify(protocolo);
+    }
+  }, []);
 
   if (diplomaData) {
     return (
@@ -173,10 +183,14 @@ const VerificationCard: React.FC = () => {
             setDiplomaData(null);
             setCode('');
             setVerificationStep('idle');
+            // Remove the protocolo parameter from the URL
+            const url = new URL(window.location.href);
+            url.searchParams.delete('protocolo');
+            window.history.replaceState({}, '', url);
           }}
           className="mt-6 w-full py-3 rounded-md text-white font-medium bg-[#0048A8] hover:bg-[#003366] transition"
         >
-          Voltar
+          Verificar outro diploma
         </button>
       </div>
     );
@@ -256,7 +270,7 @@ const VerificationCard: React.FC = () => {
             )}
 
             <button 
-              onClick={handleVerify}
+              onClick={() => handleVerify(code)}
               disabled={!code.trim() || isScanning}
               className={`w-full py-3 rounded-md text-white font-medium transition flex items-center justify-center ${
                 code.trim() && !isScanning ? 'bg-[#0048A8] hover:bg-[#003366]' : 'bg-gray-400 cursor-not-allowed'
