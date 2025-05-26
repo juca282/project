@@ -1,8 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { motion } from 'framer-motion';
 import { Loader2, CheckCircle2, Search, AlertCircle } from 'lucide-react';
-import { rateLimit } from '../utils/security';
 
 // Validate environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -14,16 +13,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: false // Disable session persistence for security
-  },
-  global: {
-    headers: {
-      'X-Client-Info': 'diploma-verification', // Custom header for request identification
-    }
-  }
-});
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 interface DiplomaData {
   codigo_verificacao: string;
@@ -65,37 +55,13 @@ const VerificationCard: React.FC = () => {
   const [error, setError] = useState('');
   const [verificationStep, setVerificationStep] = useState<'idle' | 'scanning' | 'success' | 'error'>('idle');
 
-  // Sanitize input to prevent XSS
-  const sanitizeInput = (input: string) => {
-    return input.replace(/[<>]/g, '').trim().slice(0, 100);
-  };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
-  // Function to validate URL
-  const isValidUrl = (urlString: string): boolean => {
-    try {
-      const url = new URL(urlString);
-      return url.protocol === 'https:' || url.protocol === 'http:';
-    } catch {
-      return false;
-    }
-  };
-
-  // Memoized verification function with rate limiting
-  const handleVerify = useCallback(async () => {
-    const sanitizedCode = sanitizeInput(code);
-    
-    if (!sanitizedCode) {
+  const handleVerify = async () => {
+    if (!code.trim()) {
       setError('Por favor, digite um código válido.');
-      return;
-    }
-
-    // Check rate limit
-    if (!rateLimit('verify-diploma', 5)) { // 5 requests per minute
-      setError('Muitas tentativas. Por favor, aguarde um momento.');
       return;
     }
 
@@ -104,55 +70,38 @@ const VerificationCard: React.FC = () => {
     setVerificationStep('scanning');
 
     try {
-      // Add random delay to prevent timing attacks
-      const randomDelay = Math.floor(Math.random() * 1000) + 1000;
-      await new Promise(resolve => setTimeout(resolve, randomDelay));
-
       const { data, error: supabaseError } = await supabase
         .from('diplomas')
         .select('*')
-        .eq('codigo_verificacao', sanitizedCode)
-        .limit(1)
-        .single();
+        .eq('codigo_verificacao', code)
+        .limit(1);
 
       if (supabaseError) throw supabaseError;
 
-      if (!data) {
+      if (!data || data.length === 0) {
         throw new Error('Diploma não encontrado');
       }
 
-      const requiredFields: (keyof DiplomaData)[] = [
-        'codigo_verificacao',
-        'nome',
-        'curso',
-        'instituicao',
-        'data_emissao',
-        'qr_code_url'
-      ];
-
-      const missingFields = requiredFields.filter(field => !data[field]);
-
+      const diploma = data[0];
+      
+      const requiredFields: (keyof DiplomaData)[] = ['codigo_verificacao', 'nome', 'curso', 'instituicao', 'data_emissao', 'qr_code_url'];
+      const missingFields = requiredFields.filter(field => !diploma[field]);
+      
       if (missingFields.length > 0) {
         throw new Error('Erro no sistema: Dados do diploma incompletos. Por favor, contate o suporte.');
       }
 
-      // Validate QR code URL
-      if (!isValidUrl(data.qr_code_url)) {
-        console.error('Invalid QR code URL:', data.qr_code_url);
-        throw new Error('QR Code inválido ou indisponível');
-      }
-
+      await new Promise(resolve => setTimeout(resolve, 2000));
       setVerificationStep('success');
       await new Promise(resolve => setTimeout(resolve, 1000));
-      setDiplomaData(data as DiplomaData);
+      setDiplomaData(diploma as DiplomaData);
     } catch (err) {
-      console.error('Verification error:', err);
       setVerificationStep('error');
       setError(err instanceof Error ? err.message : 'Erro ao verificar o diploma');
     } finally {
       setIsScanning(false);
     }
-  }, [code]);
+  };
 
   if (diplomaData) {
     return (
@@ -175,8 +124,6 @@ const VerificationCard: React.FC = () => {
               src={diplomaData.qr_code_url}
               alt={`QR Code do diploma de ${diplomaData.nome}`}
               className="w-32 h-32"
-              crossOrigin="anonymous"
-              referrerPolicy="no-referrer"
             />
           </div>
           
@@ -302,10 +249,6 @@ const VerificationCard: React.FC = () => {
               placeholder="Digite o código aqui..."
               disabled={isScanning}
               className="w-full px-4 py-3 border border-[#0048A8] rounded-md focus:outline-none focus:ring-2 focus:ring-[#0048A8] focus:ring-opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed"
-              maxLength={100}
-              pattern="[a-zA-Z0-9-]*"
-              autoComplete="off"
-              spellCheck="false"
             />
 
             {error && (
@@ -321,7 +264,7 @@ const VerificationCard: React.FC = () => {
             >
               {isScanning ? (
                 <>
-                  Verificando...
+                  Verificando....
                 </>
               ) : (
                 'Verificar'
