@@ -74,6 +74,16 @@ const VerificationCard: React.FC = () => {
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
+  // Function to validate URL
+  const isValidUrl = (urlString: string): boolean => {
+    try {
+      const url = new URL(urlString);
+      return url.protocol === 'https:' || url.protocol === 'http:';
+    } catch {
+      return false;
+    }
+  };
+
   // Memoized verification function with rate limiting
   const handleVerify = useCallback(async () => {
     const sanitizedCode = sanitizeInput(code);
@@ -127,9 +137,9 @@ const VerificationCard: React.FC = () => {
       }
 
       // Validate QR code URL
-      const qrCodeUrl = new URL(data.qr_code_url);
-      if (!qrCodeUrl.protocol.startsWith('https')) {
-        throw new Error('QR Code inválido');
+      if (!isValidUrl(data.qr_code_url)) {
+        console.error('Invalid QR code URL:', data.qr_code_url);
+        throw new Error('QR Code inválido ou indisponível');
       }
 
       setVerificationStep('success');
