@@ -286,7 +286,7 @@ const VerificationCard: React.FC = () => {
             />
 
             {error && (
-              <p className="text-red-600 text-sm\" role="alert">{error}</p>
+              <p className="text-red-600 text-sm\" role=\"alert">{error}</p>
             )}
 
             <button 
