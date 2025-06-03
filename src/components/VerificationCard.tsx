@@ -100,9 +100,9 @@ const VerificationCard: React.FC = () => {
         .select('codigo_verificacao, nome, curso, instituicao, data_emissao, qr_code_url')
         .eq('codigo_verificacao', sanitizedCode)
         .limit(1)
-        .single();
+        .maybeSingle();
 
-      if (supabaseError) throw new Error(ERROR_MESSAGES.NOT_FOUND);
+      if (supabaseError) throw new Error(ERROR_MESSAGES.SYSTEM_ERROR);
 
       if (!data) {
         throw new Error(ERROR_MESSAGES.NOT_FOUND);
