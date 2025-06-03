@@ -34,7 +34,7 @@ interface DiplomaData {
 
 const DiplomaIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
   return (
-    <svg width="105" height="77" viewBox="0 0 105 77" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg width="105\" height="77\" viewBox="0 0 105 77\" fill="none\" xmlns="http://www.w3.org/2000/svg" {...props}>
       <rect x="1.66212" y="1.66212" width="101.676" height="73.6758" rx="3.32425" fill="white" stroke="#111d7d" strokeWidth="3.32425" strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M25.9735 1.66187C25.9735 0.744045 26.7176 0 27.6354 0H30.3906C31.3084 0 32.0525 0.744045 32.0525 1.66187C32.0525 2.5797 31.3084 3.32374 30.3906 3.32374H27.6354C26.7176 3.32374 25.9735 2.5797 25.9735 1.66187Z" fill="#111d7d"/>
       <path d="M35.3684 1.66187C35.3684 0.744045 36.1125 0 37.0303 0H39.7855C40.7033 0 41.4474 0.744045 41.4474 1.66187C41.4474 2.5797 40.7033 3.32374 39.7855 3.32374H37.0303C36.1125 3.32374 35.3684 2.5797 35.3684 1.66187Z" fill="#111d7d"/>
@@ -279,7 +279,7 @@ const VerificationCard: React.FC = () => {
             />
 
             {error && (
-              <p className="text-red-600 text-sm" role="alert">{error}</p>
+              <p className="text-red-600 text-sm\" role="alert">{error}</p>
             )}
 
             <button 
