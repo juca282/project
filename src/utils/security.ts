@@ -47,13 +47,13 @@ export const securityHeaders = {
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
 };
 
-// Regular expression for verification code validation
-export const VERIFICATION_CODE_REGEX = /^[A-Za-z0-9-]{1,50}$/;
+// Regular expression for verification code validation - aceita qualquer caractere alfanumérico e símbolos comuns
+export const VERIFICATION_CODE_REGEX = /^[A-Za-z0-9\-_.@#]{1,50}$/;
 
 // Error messages
 export const ERROR_MESSAGES = {
   RATE_LIMIT: 'Muitas tentativas. Por favor, aguarde um momento antes de tentar novamente.',
-  INVALID_CODE: 'Código de verificação inválido. Use apenas letras, números e hífens.',
+  INVALID_CODE: 'Código de verificação inválido. Use apenas letras, números e caracteres especiais permitidos.',
   NOT_FOUND: 'Diploma não encontrado',
   SYSTEM_ERROR: 'Erro no sistema: Dados do diploma incompletos. Por favor, contate o suporte.',
 };
